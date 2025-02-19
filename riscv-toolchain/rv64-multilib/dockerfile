@@ -1,0 +1,10 @@
+FROM dakshinatharindu/debian:latest
+
+RUN wget https://github.com/dakshinatharindu/dockerfiles/releases/download/rv64-multilib/riscv64.tar.gz
+RUN tar -xvf riscv64.tar.gz -C /opt
+
+RUN mv /opt/opt/riscv /opt/riscv
+
+ENV PATH="/opt/riscv/bin:${PATH}"
+
+RUN rm -rf riscv64.tar.gz
