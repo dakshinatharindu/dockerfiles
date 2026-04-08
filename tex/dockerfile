@@ -5,18 +5,20 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install TeX Live and required packages
 RUN apt-get update && apt-get install -y \
-    python3-pip python3-pygments
+    python3-pip python3-pygments python3.10-venv pandoc
 
 RUN apt-get install -y texlive-full
 
 # Set working directory
 WORKDIR /latex
 
-# Copy your LaTeX project files
-COPY . /latex
-
 # Create minted cache directory
 RUN mkdir -p /latex/.minted-cache
+
+# create a virtual environment and install jupyter notebook
+RUN python3 -m venv /opt/venv && \
+    /opt/venv/bin/pip install --upgrade pip && \
+    /opt/venv/bin/pip install notebook nbconvert
 
 # Compile command (run with shell-escape for minted)
 CMD ["latexmk", "-pdf", "-shell-escape", "-interaction=nonstopmode", "main.tex"]
